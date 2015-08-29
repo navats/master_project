@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg2"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText" >
+
+    <TextView
+        android:id="@+id/speed_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="98dp"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FF3300" />
+
+    <TextView
+        android:id="@+id/coolant_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@+id/speed_value"
+        android:text="TEMP"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FF3300" />
+
+    <TextView
+        android:id="@+id/rpm_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/coolant_value"
+        android:layout_alignBottom="@+id/coolant_value"
+        android:layout_toLeftOf="@+id/speed_value"
+        android:text="RPM"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FF3300" />
+
+    <TextView
+        android:id="@+id/maf_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/coolant_value"
+        android:layout_marginBottom="154dp"
+        android:text="MAF"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FF3300" />
+
+    <TextView
+        android:id="@+id/throt_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/maf_value"
+        android:layout_alignBottom="@+id/maf_value"
+        android:layout_alignRight="@+id/rpm_value"
+        android:text="THROT"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FF3300" />
+
+</RelativeLayout>
