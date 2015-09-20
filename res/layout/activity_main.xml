@@ -46,4 +46,27 @@
         android:background="@android:color/transparent"
         android:onClick="showGauges" />
 
+    <Button
+        android:id="@+id/map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/gauge"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="29dp"
+        android:layout_marginLeft="40dp"
+        android:background="@android:color/transparent"
+        android:onClick="showMap" />
+
+    <Button
+        android:id="@+id/scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/map"
+        android:layout_alignBottom="@+id/map"
+        android:layout_marginLeft="34dp"
+        android:background="@android:color/transparent"
+        android:layout_toRightOf="@+id/gauge"
+        android:text=""
+        android:onClick="showScan" />
+
 </RelativeLayout>

@@ -143,8 +143,23 @@ public class MainActivity extends Activity {
 	            
 	}
 	
+	public void showScan(View v){
+		if(con_status){
+	        Intent j = new Intent(MainActivity.this, scanDisplay.class);
+	        j.putExtra("MAC",deviceAddress);
+	        startActivity(j);
+		}
+		else{
+			Toast.makeText(getApplicationContext(), "Please connect OBD2 device",Toast.LENGTH_LONG).show();
+		}
+}
+	public void showMap(View v){
 	
-	
+		
+		        Intent j = new Intent(MainActivity.this, mapDisplay.class);
+		        startActivity(j);
+	}
+
 	public void showGauges(View v){
 		
 		 

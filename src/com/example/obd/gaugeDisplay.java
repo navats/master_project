@@ -20,6 +20,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -31,7 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class gaugeDisplay extends Activity{
+public class gaugeDisplay extends FragmentActivity{
 
 	final Handler myHandler = new Handler();
 	final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -189,7 +190,7 @@ public class gaugeDisplay extends Activity{
 				e.printStackTrace();
 			}
 
-			obdInit();
+			//obdInit();
 			
 			start();
 			
