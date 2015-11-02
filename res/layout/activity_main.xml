@@ -34,7 +34,7 @@
         android:layout_marginTop="18dp"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#fff" />
+        android:textColor="#2e2e2e" />
 
     <Button
         android:id="@+id/gauge"
@@ -68,5 +68,25 @@
         android:layout_toRightOf="@+id/gauge"
         android:text=""
         android:onClick="showScan" />
+
+    <CheckBox
+        android:id="@+id/cb1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@+id/imageView1"
+        android:text="Simulator Mode"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/btSpeak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/bt_connect"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="27dp"
+        android:background="@android:color/transparent"
+        android:onClick="speak" />
 
 </RelativeLayout>

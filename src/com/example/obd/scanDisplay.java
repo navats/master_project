@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
+
 import pt.lighthouselabs.obd.commands.control.DtcNumberObdCommand;
 import pt.lighthouselabs.obd.commands.control.TroubleCodesObdCommand;
 import pt.lighthouselabs.obd.commands.protocol.EchoOffObdCommand;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -38,6 +40,8 @@ public class scanDisplay extends FragmentActivity{
 	DtcNumberObdCommand dtcnum = new DtcNumberObdCommand();
 	TextView dtcs;
 	
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -48,6 +52,8 @@ public class scanDisplay extends FragmentActivity{
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
         WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.scanner);
+        
+        
         
         dtcs = (TextView)findViewById(R.id.dtcs);
         
@@ -92,7 +98,16 @@ public class scanDisplay extends FragmentActivity{
 				e.printStackTrace();
 			}
 
-			//obdInit();
+			String simMode = getIntent().getExtras().getString("simMode");
+			
+			if(simMode.equals("1")){
+				Log.d("simMode", "ON");
+				obdInit();
+			}
+			else{
+				Log.d("simMode", "OFF");
+			}
+			
 			
 			start();
 			
@@ -135,15 +150,17 @@ public void start(){
 			
 			
 			Raw = troubleCodesCommand.getFormattedResult();
+			Log.d("RAW_CODE", Raw);
 			
 			if(!Raw.equals(null)){
 				
-				while(!Raw.substring(start, end).equals("0000")){
+				while(!(start+1 >= Raw.length()) && !Raw.substring(start, end).equals("0000")){
 					
 					Log.d("RawSub", Raw.substring(start, end));
 					int pid = Integer.parseInt(Raw.substring(start, end));
 					Log.d("PID", String.valueOf(pid));
-					code += "P" + Raw.substring(start, end) + " "+ getCodeName(pid) + "\n";
+//					code += "P" + Raw.substring(start, end) + " "+ getCodeName(pid) + "\n";
+					code += "P" + Raw.substring(start, end) + "\n";
 					start += 4;
 					end += 4;
 					

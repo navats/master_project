@@ -61,4 +61,62 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#FF3300" />
 
+    <ImageView
+        android:id="@+id/limitsign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/speed_value"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:src="@drawable/mph" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/speed_value"
+        android:layout_marginTop="50dp"
+        android:paddingLeft="92px" 
+        android:paddingRight="92px" 
+        android:height="40dp"
+        android:max="100"
+        android:progress="65"
+        android:progressDrawable="@drawable/bar2"
+        android:thumb="@drawable/thumb2"/>
+
+    <TextView
+        android:id="@+id/limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/limitsign"
+        android:layout_toRightOf="@+id/limitsign"
+        android:text="00"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#fff" />
+
+    <TextView
+        android:id="@+id/limit_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/seekBar"
+        android:layout_centerHorizontal="true"
+        android:text="00"
+        android:visibility="invisible"
+        android:layout_marginTop="30dp"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/bt_pause"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/seekBar"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="28dp"
+        android:background="@android:color/transparent"
+        android:text=""
+        android:onClick="pauseScan" />
+
 </RelativeLayout>

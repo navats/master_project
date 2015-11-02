@@ -14,20 +14,29 @@ import pt.lighthouselabs.obd.commands.protocol.LineFeedOffObdCommand;
 import pt.lighthouselabs.obd.commands.protocol.SelectProtocolObdCommand;
 import pt.lighthouselabs.obd.commands.temperature.EngineCoolantTemperatureObdCommand;
 import pt.lighthouselabs.obd.enums.ObdProtocols;
+import android.R.bool;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +52,11 @@ public class gaugeDisplay extends FragmentActivity{
 	BluetoothDevice device = null;
 	BluetoothSocket socket;
 	String deviceAddress;
-	TextView rpm_tx, sp_tx, temp_tx, maf_tx, throt_tx;
+	TextView rpm_tx, sp_tx, temp_tx, maf_tx, throt_tx,limit,limit_number;
+	SeekBar setLimit;
+	MediaPlayer mp;
+	Button pause;
+	int isPause;
 	
 	EngineRPMObdCommand engineRpmCommand = new EngineRPMObdCommand();
 	SpeedObdCommand speedCommand = new SpeedObdCommand();
@@ -54,11 +67,16 @@ public class gaugeDisplay extends FragmentActivity{
 	Thread th;
 	Timer timer;
 	
+	ImageView sign;
+	
 	
 	final Runnable myRunnable = new Runnable() {
+		
+		
 		   public void run() {
 			
 			
+			   
 				try {
 		   			engineRpmCommand.run(socket.getInputStream(), socket.getOutputStream());
 		   		} catch (IOException e) {
@@ -81,7 +99,44 @@ public class gaugeDisplay extends FragmentActivity{
 		   			e.printStackTrace();
 		   		}
 				
+				
 				sp_tx.setText(speedCommand.getFormattedResult());
+				String []limit_arr = speedCommand.getFormattedResult().split("[km/h]");
+				Log.d("speed",limit_arr[0]);
+				double mileSpeed_double = Double.parseDouble(limit_arr[0]);
+				mileSpeed_double *= 0.621371;
+				int mileSpeed_int = (int)mileSpeed_double;
+				String mileSpeed_txt = String.valueOf(mileSpeed_int);
+				
+				mileSpeed_txt += " MPH";
+				
+				sp_tx.setText(mileSpeed_txt);
+				
+				if(Integer.valueOf(limit_arr[0]) > setLimit.getProgress()){
+					
+					sign.setVisibility(View.VISIBLE);
+					setLimit.setVisibility(View.INVISIBLE);
+					limit_number.setText(String.valueOf(setLimit.getProgress()));
+					limit_number.setVisibility(View.VISIBLE);
+					
+					mp = MediaPlayer.create(gaugeDisplay.this, R.raw.beep);
+					mp.start();
+					mp.setOnCompletionListener(new OnCompletionListener() {
+					    public void onCompletion(MediaPlayer mp) {
+					        mp.release();
+
+					    };
+					});
+					
+				}
+				else{
+					
+				
+					
+					sign.setVisibility(View.INVISIBLE);
+					setLimit.setVisibility(View.VISIBLE);
+					limit_number.setVisibility(View.INVISIBLE);
+				}
 				
 				try {
 					temp.run(socket.getInputStream(), socket.getOutputStream());
@@ -92,6 +147,7 @@ public class gaugeDisplay extends FragmentActivity{
 		   			// TODO Auto-generated catch block
 		   			e.printStackTrace();
 		   		}
+				
 				
 				temp_tx.setText(temp.getFormattedResult());
 				
@@ -125,10 +181,32 @@ public class gaugeDisplay extends FragmentActivity{
 		   }
 		};
 
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//	// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.main, menu);
+//		return true;
+//	}
+//		
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//	    // Handle item selection
+//	    switch (item.getItemId()) {
+//	        case R.id.action_settings:
+//	        	Toast.makeText(getApplicationContext(), "Setting clicked",Toast.LENGTH_LONG).show();
+//	        	sign = (ImageView)findViewById(R.id.limitsign);
+//	        	sign.setVisibility(1);
+//	            return true;
+//	        default:
+//	            return super.onOptionsItemSelected(item);
+//	    }
+//	}
+//	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
-
+		Log.d("OncreateGauge", "entered");
+		
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -141,7 +219,35 @@ public class gaugeDisplay extends FragmentActivity{
         temp_tx = (TextView)findViewById(R.id.coolant_value);
         maf_tx = (TextView)findViewById(R.id.maf_value);
         throt_tx = (TextView)findViewById(R.id.throt_value);
+        limit = (TextView)findViewById(R.id.limit);
+        limit_number = (TextView)findViewById(R.id.limit_number);
+        setLimit = (SeekBar)findViewById(R.id.seekBar);
+        sign = (ImageView)findViewById(R.id.limitsign);
+        sign.setVisibility(View.INVISIBLE);
+        pause = (Button)findViewById(R.id.bt_pause);
+        isPause = 0;
         
+        limit.setText(Integer.toString(setLimit.getProgress()));
+        setLimit.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {       
+
+            @Override       
+            public void onStopTrackingTouch(SeekBar seekBar) {      
+                // TODO Auto-generated method stub      
+            }       
+
+            @Override       
+            public void onStartTrackingTouch(SeekBar seekBar) {     
+                // TODO Auto-generated method stub      
+            }       
+
+            @Override       
+            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {     
+                // TODO Auto-generated method stub      
+
+                limit.setText(Integer.toString(progress));
+
+            }       
+        });             
         
         deviceAddress = getIntent().getExtras().getString("MAC");
 
@@ -190,7 +296,15 @@ public class gaugeDisplay extends FragmentActivity{
 				e.printStackTrace();
 			}
 
-			//obdInit();
+			String simMode = getIntent().getExtras().getString("simMode");
+			
+			if(simMode.equals("1")){
+				Log.d("simMode", "ON");
+				obdInit();
+			}
+			else{
+				Log.d("simMode", "OFF");
+			}
 			
 			start();
 			
@@ -275,4 +389,19 @@ public class gaugeDisplay extends FragmentActivity{
 		}
 		
 	}
+	
+	public void pauseScan(View v){
+		if(isPause == 0){
+			stop();
+			isPause = 1;
+			Toast.makeText(getApplicationContext(), "Pause",Toast.LENGTH_LONG).show();
+		}
+		else{
+			start();
+			isPause = 0;
+			Toast.makeText(getApplicationContext(), "Resume",Toast.LENGTH_LONG).show();
+		}
+
+	}
+	
 }
